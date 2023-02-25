@@ -19,7 +19,6 @@ int main(int argc, char const *argv[])
         return -1;
     }
     
-
     // 循环读取目录项（目录里的内容）
     struct dirent* pDent = NULL;
     while ( (pDent = readdir(pDir)) != NULL)
@@ -37,12 +36,9 @@ int main(int argc, char const *argv[])
 
             case DT_REG  : printf("This is a regular file.\n");   break; 
 
-            default:  printf("The file type could not be determined.\n"); 
+            default:  printf("The file type could not be determined.\n");
         }
-
-
     }
-    
 
     // 关闭目录
 
