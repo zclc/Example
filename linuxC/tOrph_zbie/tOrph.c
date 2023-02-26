@@ -6,8 +6,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-// execl 函数测试
-
+// 测试孤儿进程
 int main(int argc, char const *argv[])
 {
     pid_t pid = fork();
@@ -18,18 +17,16 @@ int main(int argc, char const *argv[])
     }
     else if (pid > 0)
     {
-        
+        printf("father: childpid = %d, pid = %d, fpid = %d\n",
+         pid,getpid(),getppid());
+        sleep(1);
     }
     else if (pid == 0)
     {
-        execl("/bin/ls","ls","-l",NULL); // execl执行成功，后面都不执行
-        perror("execl error");
-        printf("----"); 
+        printf("child pid : %d, fpid = %d\n",getpid(),getppid());
+        sleep(10);
+        printf("child pid : %d, fpid = %d\n",getpid(),getppid());
     }
-    else
-    {
-        printf("other possible");
-    }
-
+    
     return 0;
 }
