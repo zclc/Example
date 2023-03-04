@@ -52,6 +52,8 @@ void* producer_fn(void* arg)
 void* consumer_fn(void* arg)
 {
     NODE *pNode = NULL;
+
+    int thread_idx = *(int*)arg;
     while (1)
     {
         pthread_mutex_lock(&mutex);
@@ -71,7 +73,7 @@ void* consumer_fn(void* arg)
             continue;
         }
         
-        printf("Consumer:  %d\n", head->data);
+        printf("Consumer[%d]:  %d\n", thread_idx, head->data);
         pNode = head; 
         head = head->next;
 
@@ -103,9 +105,11 @@ int main(int argc, char const *argv[])
 
     pthread_t consumer[5];
     int i;
+    int arr[i];
     for ( i = 0; i < 5; i++)
     {
-        ret = pthread_create(&consumer[i],NULL,consumer_fn,NULL);
+        arr[i] = i;
+        ret = pthread_create(&consumer[i],NULL,consumer_fn,(void *)&arr[i]);
         if (ret != 0)
         {
             printf("pthread_create error,%s\n",strerror(ret));
@@ -113,17 +117,13 @@ int main(int argc, char const *argv[])
         }
     }
     
-
-
     pthread_join(producer, NULL);
     
     for ( i = 0; i < 5; i++)
     {
-        pthread_join(&consumer[i], NULL);        
+        pthread_join(consumer[i], NULL);        
     }
-    
 
- 
     // 释放互斥锁
     pthread_mutex_destroy(&mutex);
 
